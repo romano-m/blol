@@ -1,4 +1,6 @@
 .DS_Store
 flask-docs.pdf
-venv
 blol.db
+*.pyc
+instance/
+blolapp/blol.db
