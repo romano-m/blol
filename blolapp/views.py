@@ -1,6 +1,7 @@
-from flask import Flask, request, session, g, redirect,url_for, abort, render_template, flash
-from blolapp import app, connect_db, init_db, get_db
 import sqlite3
+from flask import Flask, request, session, g, redirect,url_for, abort, render_template, flash
+from blolapp import app
+from db_func import connect_db, init_db, get_db
 
 @app.route('/')
 def show_entries():
