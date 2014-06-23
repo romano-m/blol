@@ -1,14 +1,11 @@
 import sqlite3
 from flask import Flask, request, session, g, redirect,url_for, abort, render_template, flash
 from blolapp import app
-from db_func import connect_db, init_db, get_db
+from db_func import connect_db, init_db, get_db, get_entries
 
 @app.route('/')
 def show_entries():
-	db = get_db()
-	cur = db.execute('select title, text from entries order by id desc')
-	entries = cur.fetchall()
-	return render_template('show_entries.html', entries=entries)
+	return render_template('show_entries.html', entries=get_entries())
 
 @app.route('/add', methods=['POST'])
 def add_entry():

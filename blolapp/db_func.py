@@ -16,7 +16,14 @@ def init_db():
 		db.commit()
 
 def get_db():
-	"""Opens a new database coneection if there is none yet for the current application context."""
+	"""Opens a new database connection if there is none yet for the current application context."""
 	if not hasattr(g, 'sqlite_db'):
 		g.sqlite_db = connect_db()
 	return g.sqlite_db
+
+def get_entries():
+	"""returns entries from db"""
+	db = get_db()
+	cur = db.execute('select title, text from entries order by id desc ')
+	entries = cur.fetchall()
+	return entries
