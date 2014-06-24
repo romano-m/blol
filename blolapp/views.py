@@ -1,7 +1,7 @@
 import sqlite3
 from flask import Flask, request, session, g, redirect,url_for, abort, render_template, flash
 from blolapp import app
-from db_func import connect_db, init_db, get_db, get_entries
+from database import connect_db, init_db, get_db, get_entries
 
 @app.route('/')
 def show_entries():
@@ -37,8 +37,15 @@ def logout():
 	flash('You were logged out')
 	return redirect(url_for('show_entries'))
 
+# @app.teardown_appcontext
+# def close_db(error):
+#     """Closes the database again at the end of the request."""
+#     if hasattr(g, 'sqlite_db'):
+#         g.sqlite_db.close()
+
+#SQLALchemy integration
+from database import db_session
+
 @app.teardown_appcontext
-def close_db(error):
-    """Closes the database again at the end of the request."""
-    if hasattr(g, 'sqlite_db'):
-        g.sqlite_db.close()
+def shutdown_session(exception=None):
+    db_session.remove()
