@@ -3,4 +3,4 @@ flask-docs.pdf
 blol.db
 *.pyc
 instance/
-blolapp/blol.db
+blolapp/blolapp.db

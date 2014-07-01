@@ -1,11 +1,10 @@
-import sqlite3
 from flask import Flask, request, session, g, redirect,url_for, abort, render_template, flash
 from blolapp import app
-from database import connect_db, init_db, get_db, get_entries
+from database import get_posts
 
 @app.route('/')
 def show_entries():
-	return render_template('show_entries.html', entries=get_entries())
+	return render_template('show_entries.html', entries=get_posts())
 
 @app.route('/add', methods=['POST'])
 def add_entry():
@@ -44,7 +43,7 @@ def logout():
 #         g.sqlite_db.close()
 
 #SQLALchemy integration
-from database import db_session
+from blolapp import db_session
 
 @app.teardown_appcontext
 def shutdown_session(exception=None):
