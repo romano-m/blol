@@ -1,18 +1,19 @@
-from flask import Flask, request, session, g, redirect,url_for, abort, render_template, flash
-from blolapp import app
+from flask import Flask, request, session, redirect,url_for, abort, render_template, flash
+from blolapp import app, db_session
 from database import get_posts
+from models import Post
 
 @app.route('/')
 def show_entries():
-	return render_template('show_entries.html', entries=get_posts())
+	return render_template('show_entries.html', posts=get_posts())
 
 @app.route('/add', methods=['POST'])
 def add_entry():
 	if not session.get('logged_in'):
 		abort(401)
-	db = get_db()
-	db.execute('insert into entries(title, text) values(?,?)', [request.form['title'], request.form['text']])
-	db.commit()
+	p = Post(title = request.form['title'], text = request.form['text'])
+	db_session.add(p)
+	db_session.commit()
 	flash('New entry was successfully posted')
 	return redirect(url_for('show_entries'))
 
@@ -35,12 +36,6 @@ def logout():
 	session.pop('logged_in', None)
 	flash('You were logged out')
 	return redirect(url_for('show_entries'))
-
-# @app.teardown_appcontext
-# def close_db(error):
-#     """Closes the database again at the end of the request."""
-#     if hasattr(g, 'sqlite_db'):
-#         g.sqlite_db.close()
 
 #SQLALchemy integration
 from blolapp import db_session
