@@ -5,11 +5,18 @@
 <div class=page>
 	<h1>Blol</h1>
 	<div class=metanav>
-	{% if not session.logged_in %}
-		<a href="{{ url_for('signin') }}">log in</a>
-	{% else %}
-		<a href="{{ url_for('signout') }}">log out</a>
-	{% endif %}
+	<tbody>
+		<tr>
+			<td><a class=metanav-regular href="{{url_for('home')}}">homepage</a></td>
+			<td><a class=metanav-regular href="{{url_for('profile')}}">my profile</a></td>
+		{% if not 'email' in session %}
+			<td><a class=metanav-login href="{{ url_for('signin') }}">sign in</a></td>
+		{% else %}
+			<td><a class=metanav-logout href="{{ url_for('signout') }}">sign out</a></td>
+		{% endif %}
+			<td><a class=metanav-regular href="{{url_for('add_entry')}}">___+___</a></td>
+		</tr>
+	</tbody>
 	</div>
 	{% for message in get_flashed_messages() %}
 		<div class=flash>{{ message }}</div>
