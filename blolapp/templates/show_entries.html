@@ -7,13 +7,19 @@
 				<dd><input type=text size=30 name=title>
 				<dt>Text:
 				<dd><textarea name=text rows=5 cols=40></textarea>
-				<dd><input type=submit value=Share>
+				<dd><input type=submit value=Post>
 			</dl>
 		</form>
 	{% endif %}
 	<ul class=posts>
 	{% for post in posts %}
-		<li><h2>{{ post.title }}</h2>{{ post.text }}
+		<div>
+			<p class=post-info>{{ 'posted on'}} {{ post.posted_on }} 
+				{% if post.user == None %} {{ 'posted by None' }}
+				{% else %} {{ 'posted by ' + post.user.username }}
+				{% endif %}</p>
+			<li><h2>{{ post.title }}</h2>{{ post.text }}
+		</div>
 	{% else %}
 		<li><em>Unbelievable. No posts here so far</em>
 	{% endfor %}

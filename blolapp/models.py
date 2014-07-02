@@ -12,37 +12,35 @@ class Post(Base):
 	__tablename__ = 'posts'
 
 	id = Column(Integer, primary_key = True)
-	title = Column(String(50))
-	text = Column(String(140))
-	# posted_on = Column(DateTime, default=func.now())
-	# user_id = Column(Integer, ForeignKey('users.id'))
+	title = Column(String(50), nullable = False)
+	text = Column(String(140), nullable = False)
+	posted_on = Column(DateTime, default=func.now())
+	user_id = Column(Integer, ForeignKey('users.id'))
+	user = relationship("User", backref = "posts")
 
-	def __init__(self, title, text):
+	def __init__(self, title, text, posted_on):
 		self.title = title
 		self.text = text
-		# self.posted_on = posted_on
-		# self.user_id = user_id
+		self.posted_on = posted_on
 
 	def __repr__(self):
 		return '<Post %r>' % (self.text)
 
 
-# class User(Base):
+class User(Base):
 
-# 	__tablename__ = 'users'
-# 	__table_args__ = {'extend_existing': True}
+	__tablename__ = 'users'
+	__table_args__ = {'extend_existing': True}
 
-# 	id = Column(Integer, primary_key = True)
-# 	username = Column(String(64), index = True, unique = True)
-# 	email = Column(String(120), index = True, unique = True)
-# 	role = Column(SmallInteger, default = ROLE_USER)
-# 	posts = relationship(Post, backref = 'user', lazy = 'dynamic')
+	id = Column(Integer, primary_key = True)
+	username = Column(String(64), index = True, unique = True)
+	email = Column(String(120), index = True, unique = True)
+	role = Column(SmallInteger, default = ROLE_USER)
 
-# 	def __init__(self, username = None, email = None, role = None):
-# 		self.username = username
-# 		self.email = email
-# 		self.role = role
-# 		self.posts = posts
+	def __init__(self, username, email, role):
+		self.username = username
+		self.email = email
+		self.role = role
 
-# 	def __repr__(self):
-# 		return '<User %r>' % (self.name)
+	def __repr__(self):
+		return '<User %r>' % (self.username)

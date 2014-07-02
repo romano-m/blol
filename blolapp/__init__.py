@@ -21,4 +21,9 @@ db_session = scoped_session(sessionmaker(autocommit=False,
 
 Base.query = db_session.query_property()
 
+from flask.ext.login import LoginManager
+
+lm = LoginManager()
+lm.init_app(app)
+
 from blolapp import views, models

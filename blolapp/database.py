@@ -1,7 +1,6 @@
 #SQLALchemy integration
 from blolapp import Base, db_session
 from sqlalchemy import create_engine
-from models import Post
 from config import DATABASE
 
 def init_db():
@@ -11,8 +10,3 @@ def init_db():
 	import models
 	engine = create_engine('sqlite:///'+ DATABASE)
 	Base.metadata.create_all(bind = engine)
-
-def get_posts():
-	"""returns entries from db"""
-	posts = db_session.query(Post).all()
-	return posts
