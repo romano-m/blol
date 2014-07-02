@@ -1,7 +1,8 @@
+from blolapp import app, db_session
 from flask import Flask, request, session, redirect,url_for, abort, render_template, flash
 from sqlalchemy import func
-from blolapp import app, db_session
-from models import Post
+from models import Post, User
+from forms import SignupForm, SigninForm
 
 @app.route('/')
 def show_entries():
@@ -34,6 +35,62 @@ def login():
 			return redirect(url_for('show_entries'))
 	return render_template('login.html',
 								error=error)
+
+@app.route('/signup', methods=['GET', 'POST'])
+def signup():
+	form = SignupForm()
+
+	if request.method == 'POST':
+		if form.validate() == False:
+			return render_template('signup.html', form=form)
+		else:
+			newuser = User(form.username.data, form.email.data, form.password.data)
+			db_session.add(newuser)
+			db_session.commit()
+
+			session['email'] = newuser.email
+
+			return redirect(url_for('show_entries'))
+	
+	elif request.method == 'GET':
+		return render_template('signup.html', form=form)
+
+@app.route('/profile')
+def profile():
+	if 'email' not in session:
+		return redirect(url_for('signin'))
+
+	user = User.query.filter_by(email = session['email']).first()
+
+	if user is None:
+		return redirect(url_for('signin'))
+	else:
+		return render_template('profile.html')
+
+@app.route('/signin', methods=['GET', 'POST'])
+def signin():
+	form = SigninForm()
+
+	if request.method == 'POST':
+		if form.validate()==False:
+			return render_template('signin.html', form=form)
+		else:
+			session['email'] = form.email.data
+			return redirect(url_for('profile'))
+
+	elif request.method == 'GET':
+		if 'email' not in session:
+			return render_template('signin.html', form=form)
+		else:
+			return redirect(url_for('profile'))
+
+@app.route('/signout')
+def signout():
+	if 'email' not in session:
+		return redirect(url_for('signin'))
+
+	session.pop('email', None)
+	return redirect(url_for('show_entries'))
 
 @app.route('/logout')
 def logout():

@@ -6,6 +6,7 @@ app = Flask(__name__, instance_relative_config=True)
 app.config.from_object('config')
 app.config.from_pyfile('config.py')
 
+#creates sqlalchemy engine and binds base metadata
 from sqlalchemy import create_engine
 from sqlalchemy.orm import scoped_session, sessionmaker
 from sqlalchemy.ext.declarative import declarative_base
@@ -21,9 +22,10 @@ db_session = scoped_session(sessionmaker(autocommit=False,
 
 Base.query = db_session.query_property()
 
+#imports Login Manager
 from flask.ext.login import LoginManager
 
 lm = LoginManager()
 lm.init_app(app)
 
-from blolapp import views, models
+from blolapp import views, models, forms

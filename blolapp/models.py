@@ -2,9 +2,7 @@ from sqlalchemy import Column, Integer, String, SmallInteger, ForeignKey, DateTi
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import relationship
 from blolapp import Base
-
-ROLE_USER = 0
-ROLE_ADMIN = 1
+from werkzeug import generate_password_hash, check_password_hash
 
 
 class Post(Base):
@@ -27,20 +25,39 @@ class Post(Base):
 		return '<Post %r>' % (self.text)
 
 
+
 class User(Base):
 
 	__tablename__ = 'users'
-	__table_args__ = {'extend_existing': True}
+	# __table_args__ = {'extend_existing': True}
 
 	id = Column(Integer, primary_key = True)
 	username = Column(String(64), index = True, unique = True)
 	email = Column(String(120), index = True, unique = True)
-	role = Column(SmallInteger, default = ROLE_USER)
+	pwdhash = Column(String(54))
 
-	def __init__(self, username, email, role):
+	def __init__(self, username, email, password):
 		self.username = username
 		self.email = email
-		self.role = role
+		self.set_password(password)
+
+	def set_password(self, password):
+		self.pwdhash = generate_password_hash(password)
+
+	def check_password(self, password):
+		return check_password_hash(self.pwdhash, password)
+
+	def is_authenticated(self):
+		return True
+
+	def is_active(self):
+		return True
+
+	def is_anonymous(self):
+		return False
+
+	def get_id(self):
+		return unicode(self.id)
 
 	def __repr__(self):
 		return '<User %r>' % (self.username)
