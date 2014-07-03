@@ -7,9 +7,16 @@ from forms import SignupForm, SigninForm
 @app.route('/')
 def home():
 
-	posts = Post.query.all()
+	posts = Post.query.order_by('posted_on desc').all()
 
-	return render_template('home.html',
+	if 'email' in session:
+		user_in_session = User.query.filter_by(email = session['email']).first()
+		user_in_session_username = user_in_session.username
+		return render_template('home.html',
+							posts = posts,
+							user_in_session_username = user_in_session_username)
+	else:
+		return render_template('home.html',
 							posts = posts)
 
 
@@ -19,10 +26,13 @@ def add_entry():
 	if not 'email' in session:
 		abort(401)
 
+	user_in_session = User.query.filter_by(email = session['email']).first()
+
 	if request.method == 'POST':
 		p = Post(title = request.form['title'], 
 				text = request.form['text'], 
-				posted_on = func.now())
+				posted_on = func.now(),
+				user_id = user_in_session.id)
 		db_session.add(p)
 		db_session.commit()
 		flash('New entry was successfully posted')
@@ -42,7 +52,8 @@ def signup():
 
 	if request.method == 'POST':
 		if form.validate() == False:
-			return render_template('signup.html', form=form)
+			return render_template('signup.html', 
+									form=form)
 		else:
 			newuser = User(form.username.data, form.email.data, form.password.data)
 			db_session.add(newuser)
@@ -53,7 +64,8 @@ def signup():
 			return redirect(url_for('home'))
 	
 	elif request.method == 'GET':
-		return render_template('signup.html', form=form)
+		return render_template('signup.html',
+								form=form)
 
 @app.route('/profile')
 def profile():
@@ -61,12 +73,18 @@ def profile():
 	if 'email' not in session:
 		return redirect(url_for('signin'))
 
-	user = User.query.filter_by(email = session['email']).first()
+	user_in_session = User.query.filter_by(email = session['email']).first()
+	user_in_session_username = user_in_session.username
+	user_in_session_id = user_in_session.id
+	user_in_session_posts = Post.query.filter_by(user_id = user_in_session_id).order_by('posted_on desc').all()
 
-	if user is None:
+	if user_in_session is None:
 		return redirect(url_for('signin'))
 	else:
-		return render_template('profile.html')
+		return render_template('profile.html',
+								user_in_session_username= user_in_session_username,
+								user_in_session_posts=user_in_session_posts)
+
 
 @app.route('/signin', methods=['GET', 'POST'])
 def signin():

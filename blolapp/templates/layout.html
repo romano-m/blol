@@ -7,14 +7,17 @@
 	<div class=metanav>
 	<tbody>
 		<tr>
-			<td><a class=metanav-regular href="{{url_for('home')}}">homepage</a></td>
-			<td><a class=metanav-regular href="{{url_for('profile')}}">my profile</a></td>
+			<td><a class=metanav-regular href="{{ url_for('home') }}">homepage</a> | </td>
 		{% if not 'email' in session %}
-			<td><a class=metanav-login href="{{ url_for('signin') }}">sign in</a></td>
+			<td><a class=metanav-regular href="{{ url_for('signin') }}">sign in</a> | </td>
+			<td><a class=metanav-login href="{{ url_for('signup') }}">sign up</a></td>
 		{% else %}
+			<td><a class=metanav-regular href="{{ url_for('add_entry') }}">+</a> | </td>
+			<td><a class=metanav-regular href="{{ url_for('profile') }}">my profile</a> | </td>
 			<td><a class=metanav-logout href="{{ url_for('signout') }}">sign out</a></td>
+			<ts> - You are connected as <i>{{ user_in_session_username }}</i></ts>
 		{% endif %}
-			<td><a class=metanav-regular href="{{url_for('add_entry')}}">___+___</a></td>
+			
 		</tr>
 	</tbody>
 	</div>

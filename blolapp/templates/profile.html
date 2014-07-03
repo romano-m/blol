@@ -1,10 +1,16 @@
 {% extends "layout.html" %}
 {% block body %}
   <div class=jumbo>
-    <h2>Profile<h2>
-    <h3>This is {{ session['email'] }}'s profile page<h3>
+    <h1> {{ user_in_session_username }} <h3>
     <ul class=posts>
     <h2>Your Posts:</h2>
-    
+    {% for post in user_in_session_posts %}
+		<div>
+			<p class=post-info>{{ 'posted on'}} {{ post.posted_on }} 
+			<li><h2>{{ post.title }}</h2>{{ post.text }}
+		</div>
+	{% else %}
+		<li><em>Unbelievable. No posts here so far</em>
+	{% endfor %}
   </div>
 {% endblock %}

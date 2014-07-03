@@ -16,10 +16,11 @@ class Post(Base):
 	user_id = Column(Integer, ForeignKey('users.id'))
 	user = relationship("User", backref = "posts")
 
-	def __init__(self, title, text, posted_on):
+	def __init__(self, title, text, posted_on, user_id):
 		self.title = title
 		self.text = text
 		self.posted_on = posted_on
+		self.user_id = user_id
 
 	def __repr__(self):
 		return '<Post %r>' % (self.text)

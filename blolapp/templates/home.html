@@ -4,7 +4,7 @@
 	{% for post in posts %}
 		<div>
 			<p class=post-info>{{ 'posted on'}} {{ post.posted_on }} 
-				{% if post.user == None %} {{ 'posted by None' }}
+				{% if post.user == None %} {{ 'posted by Unknown-user' }}
 				{% else %} {{ 'posted by ' + post.user.username }}
 				{% endif %}</p>
 			<li><h2>{{ post.title }}</h2>{{ post.text }}
