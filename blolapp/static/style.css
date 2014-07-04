@@ -17,7 +17,9 @@ h2				    { font-size: 1.2em; }
 
 form input#username,
 form input#email,
-form input#password {
+form input#password,
+form input#title,
+form input#confirm{
   width: 400px;
   background-color: #fafafa;
   -webkit-border-radius: 3px;
@@ -28,7 +30,7 @@ form input#password {
   font-size: 1.1em;
 }
  
-form input#password {
+form input#confirm {
   margin-bottom: 10px;
 }
 
@@ -44,4 +46,15 @@ div.jumbo {
   -webkit-border-radius: 6px;
      -moz-border-radius: 6px;
           border-radius: 6px;
+}
+
+#text {
+  width: 400px;
+  background-color: #fafafa;
+  -webkit-border-radius: 3px;
+     -moz-border-radius: 3px;
+          border-radius: 3px;
+  border: 1px solid #cccccc;
+  padding: 5px;
+  font-size: 1.1em;
 }
