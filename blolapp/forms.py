@@ -5,7 +5,7 @@ from models import Base, User
 
 #Passer plus tard sur du wtforms - sqlalchemy
 
-#formulaire de création de compte 
+#formulaire de creation de compte 
 class SignupForm(Form):
 	username = TextField("username", 
 						[Required("Please enter your username."),
