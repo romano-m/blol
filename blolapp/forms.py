@@ -1,13 +1,28 @@
 from flask.ext.wtf import Form
 from wtforms import TextField, TextAreaField, SubmitField, validators, ValidationError, PasswordField, TextAreaField
-from wtforms.validators import Required, EqualTo, Email
+from wtforms.validators import Required, EqualTo, Email, Length
 from models import Base, User
 
+#Passer plus tard sur du wtforms - sqlalchemy
+
+#formulaire de création de compte 
 class SignupForm(Form):
-	username = TextField("username", [Required("Please enter your username.")])
-	email = TextField("Email", [Required("Please enter your email."), Email("Invalid email address.")])
-	password = PasswordField('Password', [Required(), EqualTo('confirm', message='Passwords must match')])
+	username = TextField("username", 
+						[Required("Please enter your username."),
+						Length(max=64, message='Your username should be shorter')])
+
+	email = TextField("Email", 
+						[Required("Please enter your email."), 
+						Email("Invalid email address."),
+						Length(max=120, message='Your email should be shorter')])
+
+	password = PasswordField('Password', 
+						[Required(), 
+						EqualTo('confirm', message='Passwords must match'),
+						Length(max=64, message='Your password should be shorter')])
+
 	confirm = PasswordField('Repeat Password')
+
 	submit = SubmitField("Create account")
 
 	def __init__(self, *args, **kwargs):
@@ -24,9 +39,15 @@ class SignupForm(Form):
 		else:
 			return True
 
+#formulaire de sign in
 class SigninForm(Form):
-	email = TextField("Email", [Required("Please enter your email."), Email("Invalid email address.")])
-	password = PasswordField('Password', [validators.Required("Please enter your password.")])
+	email = TextField("Email", 
+						[Required("Please enter your email."), 
+						Email("Invalid email address.")])
+
+	password = PasswordField('Password',
+	[validators.Required("Please enter your password.")])
+
 	submit = SubmitField("Sign In")
 
 	def __init__(self, *args, **kwargs):
@@ -43,9 +64,16 @@ class SigninForm(Form):
 			self.email.errors.append("Invalid e-mail or password")
 			return False
 
+#formulaire d'ajout de posts
 class AddPost(Form):
-	title = TextField("Title", [validators.Required("Please type a title.")])
-	text = TextAreaField("Text", [validators.Required("Please type some text.")])
+	title = TextField("Title", 
+						[Required("Please type a title."),
+						Length(max=50, message='Your title cannot exceed 50 characters')])
+
+	text = TextAreaField("Text", 
+						[Required("Please type some text."),
+						Length(max=140, message='Yout text cannot exceed 140 characters')])
+
 	submit = SubmitField("Post")
 
 	def __init__(self, *args, **kwargs):

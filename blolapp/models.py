@@ -35,7 +35,7 @@ class User(Base):
 	id = Column(Integer, primary_key = True)
 	username = Column(String(64), index = True, unique = True)
 	email = Column(String(120), index = True, unique = True)
-	pwdhash = Column(String(54))
+	pwdhash = Column(String(64))
 
 	def __init__(self, username, email, password):
 		self.username = username

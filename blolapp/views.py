@@ -25,8 +25,8 @@ def home():
 
 	if request.method == 'POST':
 		if form.validate() == False:
-			return render_template('add_entry',
-									form=form)
+			return render_template('home',
+								form=form)
 
 		else:
 			user_in_session = User.query.filter_by(email = session['email']).first()
